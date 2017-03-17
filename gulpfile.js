@@ -27,6 +27,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var temp = require('temp').track();
 var testServer = require('./test/server/index.js');
 var uglify = require('gulp-uglify');
+var express = require('express');
 
 var buildSources = ['lib/**/*.js'];
 var lintSources = buildSources.concat([
@@ -82,5 +83,13 @@ gulp.task('gh-pages', ['build'], function() {
   ], {base: __dirname})
     .pipe(ghPages({cacheDir: tempDir}));
 });
+
+gulp.task('serve-to-test',['build'],function(){
+  gulp.src('sw-toolbox.js').pipe(gulp.dest('./static/'));
+  testServer.startAndServe(path.join(__dirname,'/static'),8080)
+   .then(portNumber => {
+      console.log(`serving at http://localhost:${portNumber}`);
+    });
+})
 
 gulp.task('default', ['lint', 'build']);

@@ -21,12 +21,13 @@
 
 const path = require('path');
 const express = require('express');
+const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const app = express();
 
 // If the user tries to go to the root of the server, redirect them
 // to the browser test path
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.redirect('/test/browser-tests/');
 });
 
@@ -48,7 +49,7 @@ function startServer(staticAssetsPath, portNumber) {
   // Add service worker allowed header to avoid any scope restrictions
   // NOTE: NOT SAFE FOR PRODUCTION!!!
   app.use('/', express.static(staticAssetsPath, {
-    setHeaders: function(res) {
+    setHeaders: function (res) {
       res.setHeader('Service-Worker-Allowed', '/');
     }
   }));
@@ -56,27 +57,27 @@ function startServer(staticAssetsPath, portNumber) {
 
   // If the user tries to go to the root of the test server, redirect them
   // to /test/
-  app.get('/', function(req, res) {
+  app.get('/', function (req, res) {
     res.redirect('/test/browser-tests/');
   });
 
   // Iframes need to have a page loaded so the service worker will have
   // a page to claim and control. This is done by returning a basic
   // html file for /test/iframe/<timestamp>
-  app.get('/test/iframe/:timestamp', function(req, res) {
+  app.get('/test/iframe/:timestamp', function (req, res) {
     res.sendFile(path.join(__dirname, '..', 'data', 'test-iframe.html'));
   });
 
-  app.get('/test/helper/redirect', function(req, res) {
+  app.get('/test/helper/redirect', function (req, res) {
     if (req.cookies.bouncedRedirect === 'true') {
       res.clearCookie('bouncedRedirect');
-      res.json({success: true});
+      res.json({ success: true });
     } else {
       res.redirect('/test/helper/redirect/bounce');
     }
   });
 
-  app.get('/test/helper/redirect/bounce', function(req, res) {
+  app.get('/test/helper/redirect/bounce', function (req, res) {
     res.cookie('bouncedRedirect', true);
     res.json({
       redirect: '/test/helper/redirect'
@@ -85,7 +86,60 @@ function startServer(staticAssetsPath, portNumber) {
 
   return new Promise(resolve => {
     // Start service on desired port
-    _server = app.listen(portNumber, function() {
+    _server = app.listen(portNumber, function () {
+      resolve(_server.address().port);
+    });
+  });
+}
+
+function startAndServe(staticAssetsPath, portNumber) {
+  if (_server) {
+    _server.close();
+  }
+
+  if (typeof portNumber === 'undefined') {
+    portNumber = 0;
+  }
+  app.use('/', express.static(staticAssetsPath,{
+    setHeaders: function (res) {
+      res.setHeader('Service-Worker-Allowed', '/');
+    }
+  }));
+  app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
+  app.set('view engine', 'hbs');
+
+
+  app.get('/home', function (req, res) {
+    res.render('home');
+  });
+
+  app.get('/about', function (req, res) {
+    res.render('about');
+  });
+
+  app.get('/view3', function (req, res) {
+    res.render('view3');
+  })
+
+  app.get('/view4', function (req, res) {
+    res.render('view4');
+  })
+
+  app.get('/view5', function (req, res) {
+    res.render('view5');
+  })
+
+  app.get('/view6', function (req, res) {
+    res.render('view6');
+  })
+
+  app.get('/offline', function (req, res) {
+    res.render('offline');
+  })
+
+  return new Promise(resolve => {
+    // Start service on desired port
+    _server = app.listen(portNumber, function () {
       resolve(_server.address().port);
     });
   });
@@ -100,5 +154,6 @@ function killServer() {
 
 module.exports = {
   startServer: startServer,
-  killServer: killServer
+  killServer: killServer,
+  startAndServe: startAndServe
 };
