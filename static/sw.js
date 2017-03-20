@@ -13,6 +13,6 @@
 //    limitations under the License.
 
 
-var ver = '0.0.7';
-var NOTIFYVISITORS_BRAIND_ID = typeof undefined;
+var ver = '0.1.4';
+var NOTIFYVISITORS_BRAIND_ID = null;
 importScripts('/sw-toolbox.js');

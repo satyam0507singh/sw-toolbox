@@ -1,3 +1,5 @@
 node_modules
 npm-debug.log
-sw-toolbox-*.tgz
+sw-toolbox.js
+sw-toolbox.js.map
+static/sw-toolbox.js
