@@ -55,7 +55,7 @@ gulp.task('build', function() {
     .pipe(source('sw-toolbox.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
-    // .pipe(uglify({compress:false}))
+    .pipe(uglify({compress:false}))
     .pipe(header(license))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./'));
