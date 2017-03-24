@@ -1,7 +1,7 @@
 {
  "name": "SwTest", 
   "short_name": "SwTest",
-  "start_url": "/?webapp=1",
+  "start_url": "/home?webapp=1",
   "orientation": "portrait", 
   "display": "standalone", 
   "theme_color": "#a03843",
