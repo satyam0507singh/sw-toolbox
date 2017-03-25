@@ -39,7 +39,7 @@ $RECYCLE.BIN/
 # extra
 /static/sw-toolbox.js
 /sw-toolbox.js
-/sw-toolbox.map.js
+/sw-toolbox.js.map
 
 # IDE
 /.vscode
