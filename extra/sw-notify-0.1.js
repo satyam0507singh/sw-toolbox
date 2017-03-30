@@ -16,7 +16,7 @@
 'use strict';
 
 var utils = require('./utils-0.2');
-var idbConfig = require('./idb-config');
+// var idbConfig = require('./idb-config');
 
 var Notify = function () {
 

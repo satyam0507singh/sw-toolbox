@@ -13,6 +13,7 @@
 //    limitations under the License.
 
 
-var ver = '0.4.3';
+var ver = '0.5.7';
 var NOTIFYVISITORS_BRAIND_ID = 1;
-importScripts('/sw-toolbox.js');
+importScripts('/config.js');
+importScripts('/sw-notify.js');
